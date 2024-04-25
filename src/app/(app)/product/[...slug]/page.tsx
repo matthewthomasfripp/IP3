@@ -1,150 +1,175 @@
-import { getProductPage } from "@/app/actions";
-import Image from "next/image";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { getProductPage } from '@/app/actions'
+import Image from 'next/image'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+
+import { ChevronRightIcon, PlusCircle, Share } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import Logo from '@/components/logo'
+import Link from 'next/link'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  ChevronRightIcon,
-  LucideMessageCircleWarning,
-  MoreHorizontal,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Logo from "@/components/logos";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
-
-import { badgeVariants } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import ProductAlternative from '@/components/product-alternative'
+import { Rating } from '@mantine/core'
+import { Progress } from '@/components/ui/progress'
+import { Badge } from '@/components/ui/badge'
 export default async function ProductPage({
   params,
 }: {
-  params: { slug: [string, string] };
+  params: { slug: [string, string] }
 }) {
-  const product = await getProductPage(params);
+  const product = await getProductPage(params)
 
   return (
-    <div className="container relative py-14">
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-10">
-        <div>
-          <section className="sticky top-16">
-            <div>
-              <div className="font-bold text-2xl">{product.brand}</div>
-              <div className="text-lg">{product.name}</div>
-            </div>
-            <div className="text-center pt-10 pr-32 pb-10 pl-32">
+    <div className='container relative py-14'>
+      <div className='grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-10'>
+        <section className='sticky top-4 h-80 items-center'>
+          <Card className='ml-20 mt-20 max-w-md overflow-hidden rounded-lg bg-white shadow-md transition duration-300 hover:shadow-lg'>
+            <CardHeader className='relative'>
               <Image
-                className="w-full aspect-square block m-auto max-w-xl"
+                className='m-auto block aspect-square w-full max-w-xl rounded-md'
                 src={`https://www.trolley.co.uk/img/product/${product.id}`}
-                width={500}
-                height={500}
-                alt={"test"}
+                width={600}
+                height={600}
+                alt={'test'}
               />
-            </div>
-          </section>
-        </div>
-        <div className="space-y-14">
+            </CardHeader>
+            <CardContent className='p-4'>
+              <CardTitle className='mb-2 flex space-x-1 text-2xl font-bold'>
+                <span>{product.brand}</span>
+                <Badge className='bg-black text-base scale-80'>{product.tag}</Badge>
+              </CardTitle>
+              <CardDescription className='mt-[-12px] text-lg text-gray-600'>
+                {product.name}
+              </CardDescription>
+            </CardContent>
+            <CardFooter className='flex items-center justify-start gap-3 border-t bg-gray-100 p-4'>
+              <Button variant='outline' className='bg-gray-100'>
+                <PlusCircle className='mr-[5px] h-4 w-4' />
+                List
+              </Button>
+              <Button variant='outline' className='bg-gray-100'>
+                <Share className='mr-[5px] h-4 w-4' />
+                Share
+              </Button>
+            </CardFooter>
+          </Card>
+        </section>
+        <div className='space-y-12'>
           <section>
-            <div className="justify-between font-bold text-2xl mb-3">
+            <div className='mb-2 justify-between text-[26px] font-bold'>
               Where to buy
             </div>
             <Table>
               <TableBody>
                 {product.shops.map((p, i) => (
                   <TableRow key={i}>
-                    <TableCell className="hidden sm:table-cell">
-                      {Logo(p.name || "")}
+                    <TableCell className='hidden sm:table-cell'>
+                      <Logo shop={p.name!} lg />
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-1">
-                        <p className="font-semibold text-base">{p.newPrice}</p>
+                      <div className='flex gap-1'>
+                        <p className='text-base font-semibold'>{p.newPrice}</p>
                         {p.oldPrice && (
-                          <p className="text-base line-through">{p.oldPrice}</p>
+                          <p className='text-base text-foreground/60 line-through'>
+                            {p.oldPrice}
+                          </p>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground font-light mt-[-5px]">
+                      <p className='mt-[-5px] text-xs font-light text-muted-foreground'>
                         {p.eachPrice}
                       </p>
                     </TableCell>
                     <TableCell />
                     <TableCell>
                       <Link href={product.brand}>
-                        <Button variant="outline" size="icon">
-                          <ChevronRightIcon className="h-4 w-4" />
+                        <Button variant='outline' size='icon'>
+                          <ChevronRightIcon className='h-4 w-4' />
                         </Button>
                       </Link>
                     </TableCell>
                   </TableRow>
                 ))}
-                <TableRow />
+                <TableRow key='bottom' />
               </TableBody>
             </Table>
-            <div className="flex gap-2 pt-5">
-              <InfoCircledIcon className="h-6 w-6"></InfoCircledIcon>
-              <p className="text-sm text-black">
+            <div className='flex gap-2 pt-5'>
+              <InfoCircledIcon className='h-6 w-6'></InfoCircledIcon>
+              <p className='text-sm text-black'>
                 The prices shown above are available online and may not reflect
                 in store.
               </p>
             </div>
           </section>
           <section>
-            <div className="justify-between font-bold text-2xl mb-3">
-              Supermarket Alternatives
+            <div className='mb-6 justify-between text-[26px] font-bold'>
+              Good to know
             </div>
-            <div className="pl-16">
-              <Carousel className="w-full max-w-sm">
-                <CarouselContent className="-ml-1">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <CarouselItem
-                      key={index}
-                      className="pl-1 md:basis-1/2 lg:basis-1/3"
-                    >
-                      <div className="p-1">
-                        <Card>
-                          <CardContent className="flex aspect-square items-center justify-center p-6">
-                            <span className="text-2xl font-semibold">
-                              {index + 1}
-                            </span>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
+            <ul className='list-disc columns-2 gap-10 pl-5'>
+              {product.description.map((desc, i) => (
+                <li key={i} className='pb-2 text-sm'>
+                  {desc}
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <div className='mb-7 mt-[-10px] justify-between text-[26px] font-bold'>
+              Reviews
+            </div>
+            <div className='flex gap-7 pl-2'>
+              <div>
+                <p className='pb-2 text-5xl font-light'>{product.review_avg}</p>
+                <Rating
+                  fractions={4}
+                  size='md'
+                  value={product.review_width}
+                  readOnly
+                />
+                <p className='pt-1 text-sm'>{product.reviews}</p>
+              </div>
+              <div className='grow space-y-[5px]'>
+                {product.review_bars.map((bar, i) => (
+                  <div key={i} className='flex items-center space-x-3'>
+                    <div className='w-5 text-center text-[13px] font-medium leading-4'>
+                      {5 - i}
+                    </div>
+                    <Progress value={bar} className='' />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className='columns-2 pt-6'>
+              {product.review_arr.map(([text, rating], i) => (
+                <div
+                  className='duration-125 relative mb-4 transform items-center gap-[10px] rounded-lg p-2 transition hover:-translate-y-1 hover:shadow-md'
+                  key={i}
+                >
+                  <p className='pb-2 leading-tight'>{text}</p>
+                  <Rating fractions={4} size='sm' value={rating} readOnly />
+                </div>
+              ))}
             </div>
           </section>
-          <section></section>
+          <section>
+            <div className='mb-7 mt-[-10px] justify-between text-[26px] font-bold'>
+              Supermarket Alternatives
+            </div>
+            <div className='grid grid-cols-2 gap-4 pl-1'>
+              {product.alternatives.map((alt) => (
+                <ProductAlternative key={alt.title} {...alt} />
+              ))}
+            </div>
+          </section>
         </div>
       </div>
     </div>
-  );
+  )
 }

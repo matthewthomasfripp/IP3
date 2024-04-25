@@ -10,7 +10,7 @@ function PageHeader({
   return (
     <section
       className={cn(
-        'mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-16 lg:pb-16',
+        'mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-16 lg:pb-16 lg:pt-13',
         className
       )}
       {...props}

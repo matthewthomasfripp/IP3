@@ -1,10 +1,12 @@
 import '@/styles/globals.css'
+import '@mantine/core/styles.css'
 
+import { ColorSchemeScript } from '@mantine/core'
 import { Inter as FontSans } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
 import { cn } from '@/lib/utils'
-import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
+import { Toaster } from '@/components/ui/sonner'
+import { Providers } from '@/components/providers'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -31,19 +33,19 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang='en' suppressHydrationWarning>
-        <head />
+        <head>
+          <ColorSchemeScript />
+        </head>
         <body
           className={cn(
-            'min-h-screen bg-muted/40 font-sans antialiased',
+            'min-h-screen font-sans antialiased',
             fontSans.variable
           )}
         >
-          <ThemeProvider attribute='class' defaultTheme='light' enableSystem>
-            <div className='relative flex min-h-screen flex-col bg-background'>
-              {children}
-            </div>
+          <Providers>
+            {children}
             <Toaster />
-          </ThemeProvider>
+          </Providers>
         </body>
       </html>
     </>

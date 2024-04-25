@@ -1,7 +1,4 @@
-'use client'
-
 import * as React from 'react'
-import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -13,12 +10,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import { Heart } from 'lucide-react'
+import { cookies } from 'next/headers'
+import Image from 'next/image'
+import { Card } from './ui/card'
+import WishlistRemove from './wishlist-remove'
 
-export function Wishlist() {
+export default function Wishlist() {
+  const cookieStore = cookies()
+
+  const products = cookieStore
+    .getAll()
+    .filter((c) => c.name.startsWith('p-') && c.value)
+    .map((x) => JSON.parse(x.value))
+
   return (
     <div className='flex justify-end md:w-1/3'>
       <Sheet>
@@ -33,30 +39,47 @@ export function Wishlist() {
           </Button>
         </SheetTrigger>
         <SheetContent>
-          <SheetHeader>
+          <SheetHeader className='mb-4'>
             <SheetTitle>My Wishlist</SheetTitle>
             <SheetDescription>
               Create and share your personalised Wishlist.
             </SheetDescription>
           </SheetHeader>
-          <div className='grid gap-4 py-4'>
-            <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='name' className='text-right'>
-                Name
-              </Label>
-              <Input id='name' value='Pedro Duarte' className='col-span-3' />
-            </div>
-            <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='username' className='text-right'>
-                Username
-              </Label>
-              <Input id='username' value='@peduarte' className='col-span-3' />
-            </div>
+          <div className='space-y-3'>
+            {products.map((product) => (
+              <Card className='duration-125 relative flex transform rounded-lg text-sm transition hover:-translate-y-1 hover:shadow-md'>
+                <WishlistRemove id={product.id} />
+                <a href={product.href} className='flex-none bg-muted/50'>
+                  <div className='relative'>
+                    <Image
+                      className='overflow-hidden p-3'
+                      src={`https://www.trolley.co.uk/img/product/${product.id}`}
+                      width={100}
+                      height={413}
+                      alt={product.name}
+                    />
+                  </div>
+                </a>
+                <div className='relative pl-2 pr-2 pt-4'>
+                  <div className='flex gap-2'>
+                    <a href={product.href}>
+                      <span className='text-lg font-bold leading-none'>
+                        {product.brand}
+                      </span>
+                    </a>
+                  </div>
+                  <a href={product.href}>
+                    <p className='text-medium line-clamp-2'>{product.name}</p>
+                  </a>
+                </div>
+              </Card>
+            ))}
           </div>
+
           <SheetFooter>
-            <SheetClose asChild>
+            {/* <SheetClose asChild>
               <Button type='submit'>Save changes</Button>
-            </SheetClose>
+            </SheetClose> */}
           </SheetFooter>
         </SheetContent>
       </Sheet>

@@ -3,16 +3,10 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LineChart, ShoppingBasket, Tag, Telescope } from 'lucide-react'
+import { ShoppingBasket, Tag, Telescope } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from './ui/tooltip'
 
-export function MainNav() {
+export default function MainNav() {
   const pathname = usePathname()
 
   return (

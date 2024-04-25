@@ -1,4 +1,6 @@
+import { cn } from '@/lib/utils'
 import Image from 'next/image'
+
 const sizes: {
   [key: string]: {
     height: number
@@ -17,29 +19,36 @@ const sizes: {
   homebargains: { height: 18, width: 87 },
   wilko: { height: 18, width: 49 },
   boots: { height: 20, width: 32 },
-  superdrug: { height: 24, width: 70, marginTop: -7 },
-  aldi: { height: 24, width: 59 },
-  bm: { height: 19, width: 37 },
+  superdrug: { height: 24, width: 100, marginTop: -4 },
+  aldi: { height: 24, width: 50 },
+  bm: { height: 19, width: 39, marginTop: -2 },
   ocado: { height: 19, width: 73 },
   savers: { height: 17, width: 66, marginTop: -5 },
   poundland: { height: 18, width: 104 },
-  amazon: { height: 18, width: 60 },
+  amazon: { height: 18, width: 60, marginTop: 4 },
   ebay: { height: 24, width: 46 },
   bother: { height: 19, width: 47 },
 }
 
-export default function Logo(name: string) {
+export default function Logo({
+  shop,
+  className,
+  lg,
+}: {
+  shop: string
+  className?: string
+  lg?: boolean
+}) {
   return (
-    <div className='flex h-5 content-center'>
+    <div className={cn('flex h-5 content-center', className)}>
       <Image
-        src={`/logos/${name}.svg`}
-        alt={name || 'Shop'}
-        height={sizes[name].height}
-        width={sizes[name].width}
+        src={`/logos/${shop}.svg`}
+        alt={shop || 'Shop'}
+        height={sizes[shop].height}
+        width={sizes[shop].width}
         style={{
-          display: 'block',
           objectFit: 'contain',
-          marginTop: sizes[name].marginTop || 0,
+          marginTop: lg ? 0 : sizes[shop].marginTop || 0,
         }}
       />
     </div>
