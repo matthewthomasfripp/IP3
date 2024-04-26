@@ -3,7 +3,6 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: {},
   },
-  'postcss-preset-mantine': {},
   'postcss-simple-vars': {
     variables: {
       'mantine-breakpoint-xs': '36em',
