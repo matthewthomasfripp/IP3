@@ -32,15 +32,15 @@ const stores = [
 
 export default function StoreFilter({ deals }: any) {
   return (
-    <div className='lg:pt-13 mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-16 lg:pb-16'>
-      <p className='mb-2 text-3xl font-bold tracking-tight'>Filter by store</p>
+    <div className='lg:pt-13 flex flex-col items-start gap-2 py-8 6'>
+      <p className='mb-1 text-[28px] font-[650] tracking-tight'>Filter by store</p>
       <div className='flex gap-4'>
         {deals.stores.map((shop: any) => (
           <Link href={`/deals/stores/${shop.id}`}>
             <Button
               key={shop.name}
               variant='outline'
-              className='h-20 w-[134px] rounded-md'
+              className='h-24 w-[153px] rounded-md'
             >
               <Logo shop={shop.name} />
             </Button>

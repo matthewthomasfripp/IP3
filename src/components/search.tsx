@@ -13,15 +13,8 @@ export default function Search() {
 
     const val = e.target as HTMLFormElement
     const search = val.search as HTMLInputElement
-    const newParams = new URLSearchParams(searchParams.toString())
 
-    if (search.value) {
-      newParams.set('q', search.value)
-    } else {
-      newParams.delete('q')
-    }
-
-    router.push(createUrl('/search', newParams))
+    router.push(`/search/${search.value}`)
   }
 
   return (

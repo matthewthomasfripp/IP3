@@ -1,4 +1,4 @@
-import { getDealsPage } from '@/app/actions'
+import { getSearchPage } from '@/app/actions'
 import Logo from '@/components/logo'
 import StoreFilter from '@/components/store-filter'
 import ProductCard2 from '@/components/product-card-2'
@@ -8,20 +8,11 @@ export default async function DealsPage({
 }: {
   params: { slug: [string, string] }
 }) {
-  const deals = await getDealsPage(params.slug)
+  const deals = await getSearchPage(params.slug)
 
   return (
     <div className='container relative'>
-      {params.slug ? (
-        <div className='mx-auto flex max-w-[980px] scale-[250%] flex-col items-center py-6 pt-10'>
-          <Logo shop={deals.products[0].store} />
-        </div>
-      ) : (
-        <StoreFilter deals={deals} />
-      )}
-      <p className='mb-2 pb-1 text-[28px] font-[650] tracking-tight'>
-        Daily Deals
-      </p>
+      <p className='mb-2 pb-1 pt-8 text-[28px] font-[650] tracking-tight'>Search</p>
       <div className='grid grid-cols-4 gap-4'>
         {deals.products.map((product) => (
           <ProductCard2 product={product} key={product.id} />

@@ -2,7 +2,7 @@ import { getProductPage } from '@/app/actions'
 import Image from 'next/image'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 
-import { ChevronRightIcon, PlusCircle, Share } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Logo from '@/components/logo'
 import Link from 'next/link'
@@ -20,6 +20,8 @@ import ProductAlternative from '@/components/product-alternative'
 import { Rating } from '@mantine/core'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
+import WishlistAdd from '@/components/wishlist-add'
+import Share from '@/components/share'
 export default async function ProductPage({
   params,
 }: {
@@ -44,21 +46,19 @@ export default async function ProductPage({
             <CardContent className='p-4'>
               <CardTitle className='mb-2 flex space-x-1 text-2xl font-bold'>
                 <span>{product.brand}</span>
-                <Badge className='bg-black text-base scale-80'>{product.tag}</Badge>
+                {product.tag && (
+                  <Badge className='scale-80 bg-black text-base'>
+                    {product.tag}
+                  </Badge>
+                )}
               </CardTitle>
               <CardDescription className='mt-[-12px] text-lg text-gray-600'>
                 {product.name}
               </CardDescription>
             </CardContent>
             <CardFooter className='flex items-center justify-start gap-3 border-t bg-gray-100 p-4'>
-              <Button variant='outline' className='bg-gray-100'>
-                <PlusCircle className='mr-[5px] h-4 w-4' />
-                List
-              </Button>
-              <Button variant='outline' className='bg-gray-100'>
-                <Share className='mr-[5px] h-4 w-4' />
-                Share
-              </Button>
+              <WishlistAdd product={product} />
+              <Share id={product.id} />
             </CardFooter>
           </Card>
         </section>
@@ -146,10 +146,10 @@ export default async function ProductPage({
                 ))}
               </div>
             </div>
-            <div className='columns-2 pt-6'>
+            <div className='grid grid-cols-2 pt-6'>
               {product.review_arr.map(([text, rating], i) => (
                 <div
-                  className='duration-125 relative mb-4 transform items-center gap-[10px] rounded-lg p-2 transition hover:-translate-y-1 hover:shadow-md'
+                  className='duration-125 relative mb-4 transform items-center gap-[10px] rounded-lg p-2 transition hover:-translate-y-1 hover:bg-white hover:shadow-md'
                   key={i}
                 >
                   <p className='pb-2 leading-tight'>{text}</p>
@@ -158,16 +158,18 @@ export default async function ProductPage({
               ))}
             </div>
           </section>
-          <section>
-            <div className='mb-7 mt-[-10px] justify-between text-[26px] font-bold'>
-              Supermarket Alternatives
-            </div>
-            <div className='grid grid-cols-2 gap-4 pl-1'>
-              {product.alternatives.map((alt) => (
-                <ProductAlternative key={alt.title} {...alt} />
-              ))}
-            </div>
-          </section>
+          {product.alternatives.length > 0 && (
+            <section>
+              <div className='mb-7 mt-[-10px] justify-between text-[26px] font-bold'>
+                Supermarket Alternatives
+              </div>
+              <div className='grid grid-cols-2 gap-4 pl-1'>
+                {product.alternatives.map((alt) => (
+                  <ProductAlternative key={alt.title} {...alt} />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

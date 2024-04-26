@@ -15,7 +15,7 @@ export default function ProductAlternative({
   id,
 }: any) {
   return (
-    <a href='#'>
+    <a href={`/product/a/${id}`}>
       <Card className='duration-125 relative grid h-[125px] transform grid-cols-[50px_auto] items-center gap-[10px] p-3 transition hover:-translate-y-1 hover:shadow-md'>
         <div className='relative h-12 w-12 flex-none'>
           <Image

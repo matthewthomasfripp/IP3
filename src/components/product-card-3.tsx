@@ -15,13 +15,13 @@ import { Rating } from '@mantine/core'
 import { Badge } from '@/components/ui/badge'
 import WishlistAdd from './wishlist-add'
 
-export default function ProductCard2({ product }: { product: any }) {
+export default function ProductCard3({ product }: { product: any }) {
   return (
-    <Card className='h-[470px] flex-col overflow-hidden rounded-lg bg-white shadow-md transition duration-300 hover:shadow-lg'>
+    <Card className='h-[400px] flex-col overflow-hidden rounded-lg bg-white shadow-md transition duration-300 hover:shadow-lg'>
       <CardHeader className='relative border-b bg-muted/50'>
-        {product.time && (
-          <div className='absolute left-0 top-5 rounded-r-lg bg-white p-1.5 text-xs font-medium shadow-md'>
-            {product.time}
+        {product.tag && (
+          <div className='absolute top-2 right-2'>
+            <Badge>{product.tag}</Badge>
           </div>
         )}
         <a href={product.href}>
@@ -35,20 +35,10 @@ export default function ProductCard2({ product }: { product: any }) {
         </a>
       </CardHeader>
       <CardContent className='p-4 pb-8 pt-3'>
-        <CardTitle className='relative flex text-xl font-bold'>
+        <CardTitle className='relative flex text-lg font-bold'>
           <a href={product.href}>
-            <span>{product.brand}</span>
+            <span className='line-clamp-1'>{product.brand}</span>
           </a>
-          {product.tag && (
-            <Badge className='scale-[70%] bg-black text-base'>
-              {product.tag}
-            </Badge>
-          )}
-          {product.store && (
-            <a href={product.href}>
-              <Logo shop={product.store} className='absolute right-0' />
-            </a>
-          )}
         </CardTitle>
         <CardDescription className='h-12 leading-tight text-gray-600'>
           <a href={product.href}>
@@ -59,14 +49,7 @@ export default function ProductCard2({ product }: { product: any }) {
           <div>
             <a href={product.href}>
               <p className='text-lg font-bold'>{product.price}</p>
-              <div className='-mt-1 text-xs font-[500]'>
-                {product.change && (
-                  <div className='flex gap-1.5'>
-                    <span className='line-through'>{product.change[0]}</span>
-                    <span className='text-[#4caf50]'>{product.change[1]}</span>
-                  </div>
-                )}
-              </div>
+              <div className='-mt-1 text-xs font-[500]'>{product.per_x}</div>
             </a>
           </div>
           <div className='absolute right-0'>

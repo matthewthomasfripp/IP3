@@ -103,7 +103,7 @@ export default function ProductCard({
         <hr className='bt-[1px] mb-3 mt-3 w-full' />
         <div className='flex items-center justify-start gap-3'>
           <WishlistAdd product={product} />
-          <Share />
+          <Share id={product.id} />
         </div>
       </div>
     </Card>

@@ -16,6 +16,7 @@ import { cookies } from 'next/headers'
 import Image from 'next/image'
 import { Card } from './ui/card'
 import WishlistRemove from './wishlist-remove'
+import { Badge } from './ui/badge'
 
 export default function Wishlist() {
   const cookieStore = cookies()
@@ -41,38 +42,61 @@ export default function Wishlist() {
         <SheetContent>
           <SheetHeader className='mb-4'>
             <SheetTitle>My Wishlist</SheetTitle>
-            <SheetDescription>
-              Create and share your personalised Wishlist.
+            <SheetDescription className='mt-0 -translate-y-1'>
+              Create your personalised Wishlist.
             </SheetDescription>
           </SheetHeader>
           <div className='space-y-3'>
             {products.map((product) => (
-              <Card className='duration-125 relative flex transform rounded-lg text-sm transition hover:-translate-y-1 hover:shadow-md'>
+              <div className='duration-125 relative transform transition hover:-translate-y-1 hover:shadow-md'>
                 <WishlistRemove id={product.id} />
-                <a href={product.href} className='flex-none bg-muted/50'>
-                  <div className='relative'>
-                    <Image
-                      className='overflow-hidden p-3'
-                      src={`https://www.trolley.co.uk/img/product/${product.id}`}
-                      width={100}
-                      height={413}
-                      alt={product.name}
-                    />
-                  </div>
+                <a href={product.href}>
+                  <Card className='relative flex rounded-lg text-sm'>
+                    <div className='relative mr-1 flex-none border-r bg-muted/50'>
+                      <Image
+                        className='overflow-hidden p-5'
+                        src={`https://www.trolley.co.uk/img/product/${product.id}`}
+                        width={100}
+                        height={413}
+                        alt={product.name}
+                      />
+                    </div>
+                    <div className='relative pl-2 pr-2 pt-4'>
+                      <div className='flex gap-2'>
+                        <span className='text-lg font-bold leading-none'>
+                          {product.brand}
+                        </span>
+                      </div>
+                      <p className='mb-2 line-clamp-1 text-medium'>
+                        {product.name}
+                      </p>
+                      {product.tag && (
+                        <Badge className='bg-black'>{product.tag}</Badge>
+                      )}
+                      {product.tags && (
+                        <div className='flex items-center gap-2'>
+                          {product.tags.map(
+                            (tag: { text: string; type: string }) => (
+                              <Badge
+                                key={tag.text}
+                                className={`${
+                                  {
+                                    size: 'bg-black',
+                                    qty: 'bg-blue-500',
+                                    default: 'bg-gray-500',
+                                  }[tag.type]
+                                }`}
+                              >
+                                {tag.text}
+                              </Badge>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </Card>
                 </a>
-                <div className='relative pl-2 pr-2 pt-4'>
-                  <div className='flex gap-2'>
-                    <a href={product.href}>
-                      <span className='text-lg font-bold leading-none'>
-                        {product.brand}
-                      </span>
-                    </a>
-                  </div>
-                  <a href={product.href}>
-                    <p className='text-medium line-clamp-2'>{product.name}</p>
-                  </a>
-                </div>
-              </Card>
+              </div>
             ))}
           </div>
 

@@ -12,7 +12,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <main className='light flex-1 bg-muted/40 text-foreground'>
         {children}
       </main>
-      <script src='localforage.js'></script>
     </>
   )
 }

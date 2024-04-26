@@ -14,8 +14,13 @@ export default function WishlistRemove({ id }: { id: string }) {
   }
   return (
     <div className='absolute right-0 top-0 z-10'>
-      <Button variant='ghost' size='icon' onClick={() => remove(id)}>
-        <X className='h-4 w-4' />
+      <Button
+        variant='outline'
+        size='icon'
+        className='duration-125 size-8 rounded-none rounded-bl-lg rounded-tr-lg transition-colors hover:bg-red-400'
+        onClick={() => remove(id)}
+      >
+        <X className='h-3 w-3' />
       </Button>
     </div>
   )

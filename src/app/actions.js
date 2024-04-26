@@ -106,7 +106,7 @@ export async function getProductPage({ slug: [name, id] }) {
       ).map((alt) => {
         const [title, price, per_x] = Array.from(
           alt.querySelectorAll('div > div')
-        ).map((x) => x.innerText)
+        ).map((x) => x?.innerText)
 
         return {
           id: alt.getAttribute('href').split('/').at(-1),
@@ -122,10 +122,10 @@ export async function getProductPage({ slug: [name, id] }) {
       }),
       description: Array.from(
         product.querySelectorAll('.product-description li')
-      ).map((li) => li.innerText),
+      ).map((li) => li?.innerText),
       reviews: product.querySelector('.rating-overlay div div:last-child')
         ?.innerText,
-      review_avg: product.querySelector('._rating-avg').innerText,
+      review_avg: product.querySelector('._rating-avg')?.innerText,
       review_width: Number(
         (product
           .querySelector('._fill-overlay')
@@ -140,7 +140,7 @@ export async function getProductPage({ slug: [name, id] }) {
       review_arr: Array.from(
         product.querySelectorAll('.top-reviews > div')
       ).map((review) => [
-        review.innerText,
+        review?.innerText,
         Number(
           (review
             .querySelector('.stars-overlay')
@@ -150,7 +150,7 @@ export async function getProductPage({ slug: [name, id] }) {
             5
         ),
       ]),
-      tag: product.querySelector('.-d-grey-filled').innerText,
+      tag: product.querySelector('.-d-grey-filled')?.innerText,
     }
   }, id)
 
@@ -194,12 +194,82 @@ export async function getDealsPage(slug) {
         .split('-')[2],
       time: product.querySelector('._time').innerText,
       href: product.querySelector('a').getAttribute('href'),
+      change: product.querySelector('.-price-changes').innerText.split('  '),
     }))
 
     return { stores, products }
   })
 
   console.log(data)
+
+  await browser.close()
+  return data
+}
+
+export async function getSearchPage(slug) {
+  const q = slug.join('')
+
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+
+  await page.goto(`https://www.trolley.co.uk/search/?q=${q}`)
+
+  const data = await page.evaluate(() => {
+    const products = Array.from(
+      document.querySelectorAll('.products-grid > div')
+    ).map((product) => ({
+      id: product.getAttribute('data-id'),
+      brand: product.querySelector('._brand')?.innerText.trim(),
+      name: product.querySelector('._desc')?.innerText.trim(),
+      tag: product.querySelector('._size')?.innerText.trim().split('\n')[0],
+      price: product.querySelector('._price')?.innerText.trim().split('\n')[0],
+      store: product
+        .querySelector('._price div svg')
+        .classList.toString()
+        .split('-')[2],
+      href: product.querySelector('a').getAttribute('href'),
+    }))
+
+    return { products }
+  })
+
+  console.log(data)
+
+  await browser.close()
+  return data
+}
+
+export async function getExplorePage() {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+
+  await page.goto(`https://www.trolley.co.uk/explore`)
+
+  const data = await page.evaluate(() => {
+    const categories = Array.from(document.querySelectorAll('section')).map(
+      (category) => ({
+        name: category.querySelector('h2').innerText,
+        products: Array.from(
+          category.querySelectorAll('.products-grid > div')
+        ).map((product) => ({
+          id: product.getAttribute('data-id'),
+          brand: product.querySelector('._brand')?.innerText.trim(),
+          name: product.querySelector('._desc')?.innerText.trim(),
+          tag: product.querySelector('._size')?.innerText.trim().split('\n')[0],
+          price: product
+            .querySelector('._price')
+            ?.innerText.trim()
+            .split('\n')[0],
+          href: product.querySelector('a').getAttribute('href'),
+          per_x: product.querySelector('._per-item')?.innerText.trim(),
+        })),
+      })
+    )
+
+    return { categories }
+  })
+
+  console.log(data.categories)
 
   await browser.close()
   return data
