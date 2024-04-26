@@ -228,6 +228,7 @@ export async function getSearchPage(slug) {
         .classList.toString()
         .split('-')[2],
       href: product.querySelector('a').getAttribute('href'),
+      per_x: product.querySelector('._per-item')?.innerText.trim(),
     }))
 
     return { products }
